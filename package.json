@@ -69,6 +69,8 @@
     "@release-it/conventional-changelog": "^5.0.0",
     "@types/jest": "^29.5.5",
     "@types/react": "^18.2.44",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "commitlint": "^17.0.2",
     "del-cli": "^5.1.0",
     "eslint": "^8.51.0",
@@ -80,9 +82,7 @@
     "react-native": "0.74.5",
     "react-native-builder-bob": "^0.29.1",
     "release-it": "^15.0.0",
-    "typescript": "^5.2.2",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "events": "^3.3.0"
