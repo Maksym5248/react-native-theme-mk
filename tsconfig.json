@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
-      "react-native-theme-mk": ["./src/index"]
+      "mk-react-native-theme": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,

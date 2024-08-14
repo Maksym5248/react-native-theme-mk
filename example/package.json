@@ -1,5 +1,5 @@
 {
-  "name": "react-native-theme-mk-example",
+  "name": "mk-react-native-theme-example",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",
-    "react-native-web": "~0.19.10"
+    "react-native-web": "~0.19.10",
+    "mk-react-native-theme": "../"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

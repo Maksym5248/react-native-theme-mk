@@ -1,18 +1,18 @@
-# react-native-theme-mk
+# mk-react-native-theme
 
 Package for managing theme in react-native
 
 ## Installation
 
 ```sh
-npm install react-native-theme-mk
+npm install mk-react-native-theme
 ```
 
 ## Usage
 
 
 ```js
-import { multiply } from 'react-native-theme-mk';
+import { multiply } from 'mk-react-native-theme';
 
 // ...
 

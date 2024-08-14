@@ -1,5 +1,5 @@
 {
-  "name": "react-native-theme-mk",
+  "name": "mk-react-native-theme",
   "version": "0.1.0",
   "description": "Package for managing theme in react-native",
   "source": "./src/index.tsx",
@@ -36,10 +36,10 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-theme-mk-example",
+    "example": "yarn workspace mk-react-native-theme-example",
     "test": "jest",
-    "typecheck": "tsc",
-    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
     "clean": "del-cli lib",
     "prepare": "bob build",
     "release": "release-it"
@@ -51,14 +51,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Maksym5248/react-native-theme-mk.git"
+    "url": "git+https://github.com/Maksym5248/mk-react-native-theme.git"
   },
   "author": "Max.K <max.kostin.dev@gmail.com> (https://github.com/Maksym5248)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Maksym5248/react-native-theme-mk/issues"
+    "url": "https://github.com/Maksym5248/mk-react-native-theme/issues"
   },
-  "homepage": "https://github.com/Maksym5248/react-native-theme-mk#readme",
+  "homepage": "https://github.com/Maksym5248/mk-react-native-theme#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
@@ -80,7 +80,12 @@
     "react-native": "0.74.5",
     "react-native-builder-bob": "^0.29.1",
     "release-it": "^15.0.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0"
+  },
+  "dependencies": {
+    "events": "^3.3.0"
   },
   "resolutions": {
     "@types/react": "^18.2.44"
@@ -121,37 +126,6 @@
         "preset": "angular"
       }
     }
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@react-native",
-      "prettier"
-    ],
-    "rules": {
-      "react/react-in-jsx-scope": "off",
-      "prettier/prettier": [
-        "error",
-        {
-          "quoteProps": "consistent",
-          "singleQuote": true,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "useTabs": false
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "node_modules/",
-    "lib/"
-  ],
-  "prettier": {
-    "quoteProps": "consistent",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "es5",
-    "useTabs": false
   },
   "react-native-builder-bob": {
     "source": "src",

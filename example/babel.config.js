@@ -5,12 +5,12 @@ const pkg = require('../package.json');
 const root = path.resolve(__dirname, '..');
 
 module.exports = function (api) {
-  api.cache(true);
+    api.cache(true);
 
-  return getConfig(
-    {
-      presets: ['babel-preset-expo'],
-    },
-    { root, pkg }
-  );
+    return getConfig(
+        {
+            presets: ['babel-preset-expo'],
+        },
+        { root, pkg },
+    );
 };
