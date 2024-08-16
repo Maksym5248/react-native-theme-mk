@@ -11145,13 +11145,13 @@ __metadata:
 
 "mk-react-native-theme@file:../::locator=mk-react-native-theme-example%40workspace%3Aexample":
   version: 0.1.0
-  resolution: "mk-react-native-theme@file:../#../::hash=e06996&locator=mk-react-native-theme-example%40workspace%3Aexample"
+  resolution: "mk-react-native-theme@file:../#../::hash=5a98e8&locator=mk-react-native-theme-example%40workspace%3Aexample"
   dependencies:
     events: ^3.3.0
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: bfd85caf862cbd548386a2e7784c873a5d5e823de7d803c01755daf773343ae1bf05fc8e35f56ba6960143fde00af629b6fcc4584ddf6004ed8097e4b50886a5
+  checksum: 3c211db2846ad804b9870043aa6c484634a64b5b480143890140ee6c50a913d9d993343317eb0296d9f0f51136de2874045421482dbc3aa2d8a285e67042dfd3
   languageName: node
   linkType: hard
 
