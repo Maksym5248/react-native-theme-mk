@@ -7,20 +7,23 @@ type Args<T, B> = (args: { theme: T }) => B;
 
 interface IUseStylesParams<T, B> {
     theme: ITheme<T>;
+    overrideThemeName?: string;
     createStyleSheet: Args<T, B>;
 }
 
-export function useStyles<T, B>({ theme, createStyleSheet }: IUseStylesParams<T, B>): B {
+export function useStyles<T, B>({ theme, overrideThemeName, createStyleSheet }: IUseStylesParams<T, B>): B {
     const name = useThemeName();
     const cache = useRef<Record<string, B>>({}).current;
 
     const styles = useMemo(() => {
-        if (!cache[name]) {
-            cache[name] = createStyleSheet({ theme: theme.get(name) });
+        const currentName = overrideThemeName || name;
+
+        if (!cache[currentName]) {
+            cache[currentName] = createStyleSheet({ theme: theme.get(currentName) });
         }
 
-        return cache?.[name];
-    }, [name, cache]);
+        return cache?.[currentName];
+    }, [name, cache, overrideThemeName]);
 
     return styles;
 }

@@ -46,6 +46,7 @@ export class ThemeCreator<T> implements ITheme<T> {
 
     create<B extends INamedStyles<B>>(stylesCreator: (params: { theme: T }) => B) {
         const createStyleSheet = ({ theme }: { theme: T }) => StyleSheet.create(stylesCreator({ theme }));
-        return (): B => useStyles<T, B>({ theme: this, createStyleSheet });
+
+        return (overrideThemeName?: string): B => useStyles<T, B>({ theme: this, overrideThemeName, createStyleSheet });
     }
 }
