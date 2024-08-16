@@ -1,4 +1,4 @@
-import { Theme } from '../styles';
+import { Theme } from '../../styles';
 
 export const useStyles = Theme.create(({ theme }) => ({
     container: {
