@@ -19,10 +19,19 @@ const theme = {
     primary: themePrimary,
 };
 
-export const ThemeManager = new ThemeManagerCreator('dark', {
-    light: lightTheme,
-    dark: darkTheme,
-});
+export const ThemeManager = new ThemeManagerCreator(
+    'dark', //initial theme
+    {
+        light: lightTheme,
+        dark: darkTheme,
+    },
+    true, //scaling
+    //@default designed device dimensions
+    // {
+    //     width: 375,
+    //     height: 812,
+    // };
+);
 
 ```
 
@@ -51,7 +60,7 @@ export const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     text: theme.text.h1,
     content: {
         height: device.window.height,
-    }
+    },
 }));
 ```
 
@@ -73,7 +82,6 @@ export const Screen = () => {
     );
 };
 ```
-
 
 ## Contributing
 
