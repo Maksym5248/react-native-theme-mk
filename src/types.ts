@@ -6,6 +6,11 @@ export interface IDeviceInternal {
     removeListeners(): void;
 }
 
+export interface IDimensionDesignedDevice {
+    width: number;
+    height: number;
+}
+
 export interface IDevice {
     isAndroid: boolean;
     isIOS: boolean;
@@ -39,4 +44,6 @@ export interface IThemeManager<C extends Record<string, object>> {
     useTheme(): C[keyof C];
     useThemeName(): keyof C;
     device: IDevice;
+    withScale?: boolean;
+    dimensionsDesignedDevice: IDimensionDesignedDevice;
 }

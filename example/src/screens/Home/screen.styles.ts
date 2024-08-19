@@ -8,5 +8,7 @@ export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     text: theme.text.h1,
     button: {
         margin: theme.lineHeight.H1,
+        height: 50,
+        backgroundColor: theme.colors.error,
     },
 }));
