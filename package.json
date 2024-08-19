@@ -1,5 +1,5 @@
 {
-  "name": "mk-react-native-theme",
+  "name": "@mk/react-native-theme",
   "version": "0.1.0",
   "description": "Package for managing theme in react-native",
   "source": "./src/index.tsx",
@@ -36,7 +36,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace mk-react-native-theme-example",
+    "example": "yarn workspace example link @mk/react-native-theme",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\" --fix",
@@ -95,7 +95,8 @@
     "react-native": "*"
   },
   "workspaces": [
-    "example"
+    "example",
+    "./"
   ],
   "packageManager": "yarn@3.6.1",
   "jest": {

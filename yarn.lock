@@ -2793,6 +2793,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mk/react-native-theme@*, @mk/react-native-theme@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@mk/react-native-theme@workspace:."
+  dependencies:
+    "@commitlint/config-conventional": ^17.0.2
+    "@evilmartians/lefthook": ^1.5.0
+    "@react-native/eslint-config": ^0.73.1
+    "@release-it/conventional-changelog": ^5.0.0
+    "@types/jest": ^29.5.5
+    "@types/react": ^18.2.44
+    "@typescript-eslint/eslint-plugin": ^5.0.0
+    "@typescript-eslint/parser": ^5.0.0
+    commitlint: ^17.0.2
+    del-cli: ^5.1.0
+    eslint: ^8.51.0
+    eslint-config-prettier: ^9.0.0
+    eslint-plugin-prettier: ^5.0.1
+    events: ^3.3.0
+    jest: ^29.7.0
+    prettier: ^3.0.3
+    react: 18.2.0
+    react-native: 0.74.5
+    react-native-builder-bob: ^0.29.1
+    release-it: ^15.0.0
+    typescript: ^5.2.2
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  languageName: unknown
+  linkType: soft
+
 "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1":
   version: 5.1.1-v1
   resolution: "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1"
@@ -6992,6 +7023,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"example@workspace:example":
+  version: 0.0.0-use.local
+  resolution: "example@workspace:example"
+  dependencies:
+    "@babel/core": ^7.20.0
+    "@expo/metro-runtime": ~3.2.1
+    "@mk/react-native-theme": "*"
+    expo: ~51.0.26
+    expo-status-bar: ~1.12.1
+    react: 18.2.0
+    react-dom: 18.2.0
+    react-native: 0.74.5
+    react-native-builder-bob: ^0.29.1
+    react-native-web: ~0.19.10
+  languageName: unknown
+  linkType: soft
+
 "exec-async@npm:^2.2.0":
   version: 2.2.0
   resolution: "exec-async@npm:2.2.0"
@@ -11125,66 +11173,6 @@ __metadata:
   checksum: f1fdeac0b07cf8f30fcf12f4b586795b97be856edea22b5e9072707be51fc95d41487faec3f265b42973a304fe3a64acd91a44a3826a963e37b37bafde0212c3
   languageName: node
   linkType: hard
-
-"mk-react-native-theme-example@workspace:example":
-  version: 0.0.0-use.local
-  resolution: "mk-react-native-theme-example@workspace:example"
-  dependencies:
-    "@babel/core": ^7.20.0
-    "@expo/metro-runtime": ~3.2.1
-    expo: ~51.0.26
-    expo-status-bar: ~1.12.1
-    mk-react-native-theme: ../
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-native: 0.74.5
-    react-native-builder-bob: ^0.29.1
-    react-native-web: ~0.19.10
-  languageName: unknown
-  linkType: soft
-
-"mk-react-native-theme@file:../::locator=mk-react-native-theme-example%40workspace%3Aexample":
-  version: 0.1.0
-  resolution: "mk-react-native-theme@file:../#../::hash=5a98e8&locator=mk-react-native-theme-example%40workspace%3Aexample"
-  dependencies:
-    events: ^3.3.0
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 3c211db2846ad804b9870043aa6c484634a64b5b480143890140ee6c50a913d9d993343317eb0296d9f0f51136de2874045421482dbc3aa2d8a285e67042dfd3
-  languageName: node
-  linkType: hard
-
-"mk-react-native-theme@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "mk-react-native-theme@workspace:."
-  dependencies:
-    "@commitlint/config-conventional": ^17.0.2
-    "@evilmartians/lefthook": ^1.5.0
-    "@react-native/eslint-config": ^0.73.1
-    "@release-it/conventional-changelog": ^5.0.0
-    "@types/jest": ^29.5.5
-    "@types/react": ^18.2.44
-    "@typescript-eslint/eslint-plugin": ^5.0.0
-    "@typescript-eslint/parser": ^5.0.0
-    commitlint: ^17.0.2
-    del-cli: ^5.1.0
-    eslint: ^8.51.0
-    eslint-config-prettier: ^9.0.0
-    eslint-plugin-prettier: ^5.0.1
-    events: ^3.3.0
-    jest: ^29.7.0
-    prettier: ^3.0.3
-    react: 18.2.0
-    react-native: 0.74.5
-    react-native-builder-bob: ^0.29.1
-    release-it: ^15.0.0
-    typescript: ^5.2.2
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  languageName: unknown
-  linkType: soft
 
 "mkdirp@npm:^0.5.1":
   version: 0.5.6

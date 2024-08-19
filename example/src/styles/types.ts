@@ -1,4 +1,4 @@
-import { type IStyle } from 'mk-react-native-theme';
+import { type IStyle } from '../../../src';
 
 export type IPalette = 'black' | 'grey4E' | 'grey92' | 'creamF5' | 'white' | 'green78' | 'redEF' | 'transparent' | 'greenF7';
 export type IColor =
@@ -18,7 +18,7 @@ export type IColor =
     | 'error'
     | 'transparent';
 
-export interface IThemeTextStyle {
+export interface IThemeManagerTextStyle {
     color: string;
     fontFamily: string;
     fontSize: number;
@@ -54,9 +54,9 @@ export interface IBaseThemeSchema {
     fontSize: Record<'H1' | 'H2' | 'H3' | 'H4' | 'H5' | 'H6' | 'P1' | 'P2' | 'P3' | 'P4' | 'P5', number>;
 }
 
-export interface IThemeSchema extends IBaseThemeSchema {
+export interface IThemeManagerSchema extends IBaseThemeSchema {
     palette: Record<IPalette, string>;
     element: Record<'header', IStyle>;
-    text: Record<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2' | 'p3' | 'p4' | 'p5', IThemeTextStyle>;
+    text: Record<'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p1' | 'p2' | 'p3' | 'p4' | 'p5', IThemeManagerTextStyle>;
     shadow: Record<'light', IShadow>;
 }

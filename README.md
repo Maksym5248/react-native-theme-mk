@@ -1,36 +1,39 @@
-# mk-react-native-theme
+# @mk/react-native-theme
 
 Package for managing theme in react-native
 
 ## Installation
 
 ```sh
-npm install mk-react-native-theme
+npm install @mk/react-native-theme
 ```
 
 ## Usage
 
 ```js
 import { themePrimary } from './primary-theme';
-import { ThemeCreator } from 'mk-react-native-theme';
-import { type IThemeSchema } from './types';
+import { ThemeManagerCreator } from '@mk/react-native-theme';
+import { type IThemeManagerSchema } from './types';
 
-const theme: Record<string, IThemeSchema> = {
+const theme = {
     primary: themePrimary,
 };
 
-export const Theme = new ThemeCreator<IThemeSchema>(theme);
+export const ThemeManager = new ThemeManagerCreator('dark', {
+    light: lightTheme,
+    dark: darkTheme,
+});
 
 ```
 
 ```js
 import { Screen } from './screeen';
-import { ThemeProvider } from 'mk-react-native-theme';
-import { Theme } from './styles';
+import { ThemeProvider } from '@mk/react-native-theme';
+import { ThemeManager } from './styles';
 
 export default function App() {
     return (
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider themeManager={ThemeManager}>
             <Screen />
         </ThemeProvider>
     );
@@ -38,9 +41,9 @@ export default function App() {
 ```
 
 ```js
-import { Theme } from '../styles';
+import { ThemeManager } from '../styles';
 
-export const useStyles = Theme.create(({ theme }) => ({
+export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
@@ -52,9 +55,13 @@ export const useStyles = Theme.create(({ theme }) => ({
 ```js
 import { View, Text } from 'react-native';
 import { useStyles } from './screen.styles';
+import { ThemeManager } from '../../styles';
+
+const { useTheme } = ThemeManager;
 
 export const Screen = () => {
     const styles = useStyles();
+    const theme = useTheme();
 
     return (
         <View style={styles.container}>
