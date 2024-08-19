@@ -47,17 +47,6 @@ describe('Device', () => {
         jest.clearAllMocks();
     });
 
-    describe('statusBar', () => {
-        it('should return the correct height for iOS', () => {
-            expect(device.statusBar.height).toBe(20);
-        });
-
-        it('should return the correct height for Android', () => {
-            Platform.OS = 'android';
-            expect(device.statusBar.height).toBe(20);
-        });
-    });
-
     describe('isAndroid', () => {
         it('should return true if the platform is Android', () => {
             Platform.OS = 'android';

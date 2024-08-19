@@ -1,8 +1,6 @@
-import { Dimensions, NativeModules, Platform, type EmitterSubscription } from 'react-native';
+import { Dimensions, Platform, type EmitterSubscription } from 'react-native';
 import { initialWindowMetrics } from 'react-native-safe-area-context';
 import { type IDevice, type IDeviceInternal } from './types';
-
-const { StatusBarManager } = NativeModules;
 
 const orientations = {
     PORTRAIT: 'portrait',
@@ -18,12 +16,6 @@ const isPad = () => !!Platform?.isPad;
 
 export class Device implements IDevice, IDeviceInternal {
     dimentsionSubscription: EmitterSubscription | null = null;
-
-    get statusBar() {
-        return {
-            height: this.isIOS ? 20 : StatusBarManager.HEIGHT,
-        };
-    }
 
     get isAndroid() {
         return Platform.OS === 'android';

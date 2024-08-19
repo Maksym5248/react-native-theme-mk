@@ -7,7 +7,6 @@ export interface IDeviceInternal {
 }
 
 export interface IDevice {
-    statusBar: { height: number };
     isAndroid: boolean;
     isIOS: boolean;
     isTablet: boolean;
