@@ -1,11 +1,11 @@
 import { useRef, useMemo } from 'react';
 
-import { type IThemeManager } from './types';
+import { type IDevice, type IThemeManager } from './types';
 
 interface IUseStylesParams<B, C extends Record<string, object>> {
     themeManager: IThemeManager<C>;
     overrideThemeName?: keyof C;
-    createStyleSheet: (args: { theme: C[keyof C] }) => B;
+    createStyleSheet: (args: { theme: C[keyof C]; device: IDevice }) => B;
 }
 
 export function useStyles<B, C extends Record<string, object>>({
@@ -21,7 +21,7 @@ export function useStyles<B, C extends Record<string, object>>({
         const currentName = overrideThemeName || name;
 
         if (!cache[currentName]) {
-            cache[currentName] = createStyleSheet({ theme: themeManager.get(currentName) });
+            cache[currentName] = createStyleSheet({ theme: themeManager.get(currentName), device: themeManager.device });
         }
 
         return cache?.[currentName];
