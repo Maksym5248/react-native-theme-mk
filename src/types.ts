@@ -44,6 +44,10 @@ export interface IThemeManager<C extends Record<string, object>> {
     useTheme(): C[keyof C];
     useThemeName(): keyof C;
     device: IDevice;
-    withScale?: boolean;
     dimensionsDesignedDevice: IDimensionDesignedDevice;
+}
+
+export interface IOptions {
+    dimensionsDesignedDevice?: IDimensionDesignedDevice;
+    autoScale?: boolean;
 }

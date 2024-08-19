@@ -9,6 +9,7 @@ import {
     type OnChangeCallBack,
     type IDevice,
     type IDeviceInternal,
+    type IOptions,
 } from './types';
 import { useStyles } from './use-styles';
 import { createContext, useContext, useEffect, useState } from 'react';
@@ -25,17 +26,17 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
     private themes: C;
     context: React.Context<C[keyof C]>;
     device: IDevice & IDeviceInternal;
-    withScale?: boolean;
+    autoScale?: boolean;
     dimensionsDesignedDevice: IDimensionDesignedDevice;
 
     eventEmitter = new EventEmitter();
 
-    constructor(name: keyof C, themes: C, withScale?: boolean, dimensionsDesignedDevice?: IDimensionDesignedDevice) {
+    constructor(name: keyof C, themes: C, { autoScale, dimensionsDesignedDevice }: IOptions) {
         this.themes = themes;
         this.name = name;
         this.context = createContext({} as C[keyof C]);
         this.device = new Device();
-        this.withScale = withScale;
+        this.autoScale = autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
     }
 
@@ -83,19 +84,30 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
 
         return scale;
     }
+    toggleAutoScale() {
+        this.autoScale = !this.autoScale;
+    }
 
     createStyleSheet<B extends INamedStyles<B>>(stylesCreator: (params: { theme: C[keyof C]; device: IDevice }) => B) {
         const scale = this.useScale();
 
-        const createStyleSheet = ({ theme }: { theme: C[keyof C]; device: IDevice }) => {
-            const modifiedStyles = this.withScale
+        const createStyleSheet = ({ theme, overrideAutoScale }: { theme: C[keyof C]; device: IDevice; overrideAutoScale?: boolean }) => {
+            const shouldScale = overrideAutoScale !== undefined ? overrideAutoScale : this.autoScale;
+
+            const modifiedStyles = shouldScale
                 ? applyScale(stylesCreator({ theme, device: this.device }), scale)
                 : stylesCreator({ theme, device: this.device });
 
             return StyleSheet.create(modifiedStyles);
         };
 
-        return (overrideThemeName?: keyof C): B => useStyles<B, C>({ themeManager: this, overrideThemeName, createStyleSheet });
+        return ({ overrideThemeName, overrideAutoScale }: { overrideThemeName?: keyof C; overrideAutoScale?: boolean } = {}): B =>
+            useStyles<B, C>({
+                themeManager: this,
+                overrideThemeName,
+                createStyleSheet,
+                overrideAutoScale,
+            });
     }
 
     ThemeProvider = ({ children }: React.PropsWithChildren<{}>) => {

@@ -8,5 +8,7 @@ export const ThemeManager = new ThemeManagerCreator(
         light: lightTheme,
         dark: darkTheme,
     },
-    true,
+    {
+        autoScale: true,
+    },
 );

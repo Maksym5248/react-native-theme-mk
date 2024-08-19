@@ -20,17 +20,19 @@ const theme = {
 };
 
 export const ThemeManager = new ThemeManagerCreator(
-    'dark', //initial theme
+    'dark',
     {
         light: lightTheme,
         dark: darkTheme,
     },
-    true, //scaling
-    //@default designed device dimensions
-    // {
-    //     width: 375,
-    //     height: 812,
-    // };
+    {
+        autoScale: true,
+        //@default designed device dimensions
+        dimensionsDesignedDevice: {
+            width: 375,
+            height: 812,
+        }
+    },
 );
 
 ```

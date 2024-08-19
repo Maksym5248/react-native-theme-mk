@@ -9,6 +9,6 @@ export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     button: {
         margin: theme.lineHeight.H1,
         height: 50,
-        backgroundColor: theme.colors.error,
+        backgroundColor: theme.colors.accent,
     },
 }));
