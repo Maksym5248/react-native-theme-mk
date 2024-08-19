@@ -43,12 +43,15 @@ export default function App() {
 ```js
 import { ThemeManager } from '../styles';
 
-export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+export const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
     },
     text: theme.text.h1,
+    content: {
+        height: device.window.height,
+    }
 }));
 ```
 

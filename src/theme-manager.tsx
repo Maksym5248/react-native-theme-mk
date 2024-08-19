@@ -2,9 +2,10 @@ import EventEmitter from 'events';
 
 import { StyleSheet } from 'react-native';
 
-import { type IThemeManager, type INamedStyles, type OnChangeCallBack } from './types';
+import { type IThemeManager, type INamedStyles, type OnChangeCallBack, type IDevice, type IDeviceInternal } from './types';
 import { useStyles } from './use-styles';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { Device } from './device';
 
 enum Events {
     ChangeTheme = 'ChangeTheme',
@@ -14,6 +15,7 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
     name: keyof C;
     private themes: C;
     context: React.Context<C[keyof C]>;
+    device: IDevice & IDeviceInternal;
 
     eventEmitter = new EventEmitter();
 
@@ -21,6 +23,7 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
         this.themes = themes;
         this.name = name;
         this.context = createContext({} as C[keyof C]);
+        this.device = new Device();
     }
 
     get theme() {
@@ -45,8 +48,9 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
         this.eventEmitter.removeAllListeners();
     }
 
-    createStyleSheet<B extends INamedStyles<B>>(stylesCreator: (params: { theme: C[keyof C] }) => B) {
-        const createStyleSheet = ({ theme }: { theme: C[keyof C] }) => StyleSheet.create(stylesCreator({ theme }));
+    createStyleSheet<B extends INamedStyles<B>>(stylesCreator: (params: { theme: C[keyof C]; device: IDevice }) => B) {
+        const createStyleSheet = ({ theme }: { theme: C[keyof C]; device: IDevice }) =>
+            StyleSheet.create(stylesCreator({ theme, device: this.device }));
 
         return (overrideThemeName?: keyof C): B => useStyles<B, C>({ themeManager: this, overrideThemeName, createStyleSheet });
     }
@@ -59,6 +63,10 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
     useThemeName() {
         this.useTheme();
         return this.name;
+    }
+
+    useDevice() {
+        return this.device;
     }
 
     ThemeProvider = ({ children }: React.PropsWithChildren<{}>) => {
