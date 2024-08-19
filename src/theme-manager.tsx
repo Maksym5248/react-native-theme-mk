@@ -84,19 +84,19 @@ export class ThemeManagerCreator<C extends Record<string, object>> implements IT
 
         return scale;
     }
-    toggleAutoScale() {
-        this.autoScale = !this.autoScale;
+    setAutoScale(value: boolean) {
+        this.autoScale = value;
     }
 
-    createStyleSheet<B extends INamedStyles<B>>(stylesCreator: (params: { theme: C[keyof C]; device: IDevice }) => B) {
+    createStyleSheet<B extends INamedStyles<B>>(stylesCreator: (params: { theme: C[keyof C]; device: IDevice; scale: number }) => B) {
         const scale = this.useScale();
 
         const createStyleSheet = ({ theme, overrideAutoScale }: { theme: C[keyof C]; device: IDevice; overrideAutoScale?: boolean }) => {
             const shouldScale = overrideAutoScale !== undefined ? overrideAutoScale : this.autoScale;
 
             const modifiedStyles = shouldScale
-                ? applyScale(stylesCreator({ theme, device: this.device }), scale)
-                : stylesCreator({ theme, device: this.device });
+                ? applyScale(stylesCreator({ theme, device: this.device, scale }), scale)
+                : stylesCreator({ theme, device: this.device, scale });
 
             return StyleSheet.create(modifiedStyles);
         };
