@@ -1,11 +1,12 @@
 import { HomeScreen } from './screens/Home';
 import { ShopScreen } from './screens/Shop';
-import { ThemeProvider } from 'mk-react-native-theme';
-import { Theme } from './styles';
+import { ThemeManager } from './styles';
+
+const { ThemeProvider } = ThemeManager;
 
 export default function App() {
     return (
-        <ThemeProvider theme={Theme} initialThemeName="light">
+        <ThemeProvider>
             <HomeScreen />
             <ShopScreen />
         </ThemeProvider>

@@ -1,6 +1,6 @@
-import { Theme } from '../../styles';
+import { ThemeManager } from '../../styles';
 
-export const useStyles = Theme.create(({ theme }) => ({
+export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,

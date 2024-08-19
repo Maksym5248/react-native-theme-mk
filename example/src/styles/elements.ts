@@ -1,4 +1,4 @@
-import { type IStyle } from 'mk-react-native-theme';
+import { type IStyle } from '../../../src';
 
 export const createElementsStyles = (): Record<string, IStyle> => ({
     header: {

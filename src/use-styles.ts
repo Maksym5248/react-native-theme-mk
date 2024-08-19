@@ -1,25 +1,27 @@
 import { useRef, useMemo } from 'react';
 
-import { type ITheme } from './types';
-import { useThemeName } from './use-theme-name';
+import { type IThemeManager } from './types';
 
-type Args<T, B> = (args: { theme: T }) => B;
-
-interface IUseStylesParams<T, B> {
-    theme: ITheme<T>;
-    overrideThemeName?: string;
-    createStyleSheet: Args<T, B>;
+interface IUseStylesParams<B, C extends Record<string, object>> {
+    themeManager: IThemeManager<C>;
+    overrideThemeName?: keyof C;
+    createStyleSheet: (args: { theme: C[keyof C] }) => B;
 }
 
-export function useStyles<T, B>({ theme, overrideThemeName, createStyleSheet }: IUseStylesParams<T, B>): B {
-    const name = useThemeName();
-    const cache = useRef<Record<string, B>>({}).current;
+export function useStyles<B, C extends Record<string, object>>({
+    themeManager,
+    overrideThemeName,
+    createStyleSheet,
+}: IUseStylesParams<B, C>): B {
+    const name = themeManager.useThemeName();
+
+    const cache = useRef<Record<keyof C, B>>({} as unknown as Record<keyof C, B>).current;
 
     const styles = useMemo(() => {
         const currentName = overrideThemeName || name;
 
         if (!cache[currentName]) {
-            cache[currentName] = createStyleSheet({ theme: theme.get(currentName) });
+            cache[currentName] = createStyleSheet({ theme: themeManager.get(currentName) });
         }
 
         return cache?.[currentName];

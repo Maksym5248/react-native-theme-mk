@@ -1,19 +1,16 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { type ITheme } from './types';
+import { type IThemeManager } from './types';
 
-export const ThemeNameContext = createContext('');
-
-interface ThemeProviderProps<T> extends React.PropsWithChildren {
-    theme: ITheme<T>;
-    initialThemeName: string;
+interface ThemeProviderProps<C extends Record<string, T>, T extends object> extends React.PropsWithChildren {
+    themeManager: IThemeManager<C>;
 }
 
-export function ThemeProvider<T>({ children, theme, initialThemeName }: ThemeProviderProps<T>) {
-    const [currentThemeName, setCurrentThemeName] = useState<string>(initialThemeName);
+export function ThemeProvider<C extends Record<string, T>, T extends object>({ children, themeManager }: ThemeProviderProps<C, T>) {
+    const [currentThemeName, setCurrentThemeName] = useState<keyof C>('');
 
     useEffect(() => {
-        const unsubscribe = theme.onChange((name) => {
+        const unsubscribe = themeManager.onChange((name) => {
             setCurrentThemeName(name);
         });
         return unsubscribe;
@@ -23,5 +20,5 @@ export function ThemeProvider<T>({ children, theme, initialThemeName }: ThemePro
         return null;
     }
 
-    return <ThemeNameContext.Provider value={currentThemeName}>{children}</ThemeNameContext.Provider>;
+    return <themeManager.context.Provider value={themeManager.get(currentThemeName)}>{children}</themeManager.context.Provider>;
 }

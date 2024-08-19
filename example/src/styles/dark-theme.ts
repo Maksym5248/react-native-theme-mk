@@ -2,7 +2,7 @@ import { createElementsStyles } from './elements';
 import { palette } from './palette';
 import { shadow } from './shadow';
 import { createTextStyles } from './text';
-import { type IThemeSchema, type IBaseThemeSchema } from './types';
+import { type IThemeManagerSchema, type IBaseThemeSchema } from './types';
 import { baseTheme } from './base-theme';
 
 export const themeBase: IBaseThemeSchema = {
@@ -26,7 +26,7 @@ export const themeBase: IBaseThemeSchema = {
     },
 };
 
-export const darkTheme: IThemeSchema = {
+export const darkTheme: IThemeManagerSchema = {
     ...themeBase,
     palette,
     text: createTextStyles({ theme: themeBase }),

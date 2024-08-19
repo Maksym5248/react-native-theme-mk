@@ -1,6 +1,6 @@
-import { type IBaseThemeSchema, type IThemeTextStyle } from './types';
+import { type IBaseThemeSchema, type IThemeManagerTextStyle } from './types';
 
-export const createTextStyles = ({ theme }: { theme: IBaseThemeSchema }): Record<string, IThemeTextStyle> => ({
+export const createTextStyles = ({ theme }: { theme: IBaseThemeSchema }): Record<string, IThemeManagerTextStyle> => ({
     h1: {
         color: theme.colors.primary,
         fontFamily: theme.fonts.medium,

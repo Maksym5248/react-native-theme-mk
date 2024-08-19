@@ -1,5 +1,5 @@
 {
-  "name": "mk-react-native-theme-example",
+  "name": "example",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
+    "@mk/react-native-theme": "../",
     "expo": "~51.0.26",
     "expo-status-bar": "~1.12.1",
-    "mk-react-native-theme": "../",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",
