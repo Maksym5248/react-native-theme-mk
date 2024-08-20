@@ -1,18 +1,18 @@
-# @mk/react-native-theme
+# react-native-theme-manage
 
 Package for managing theme in react-native
 
 ## Installation
 
 ```sh
-npm install react-native-safe-area-context @mk/react-native-theme
+npm install react-native-safe-area-context react-native-theme-manage
 ```
 
 ## Usage
 
 ```js
 import { themePrimary } from './primary-theme';
-import { ThemeManagerCreator } from '@mk/react-native-theme';
+import { ThemeManagerCreator } from 'react-native-theme-manage';
 import { type IThemeManagerSchema } from './types';
 
 const theme = {
@@ -39,7 +39,7 @@ export const ThemeManager = new ThemeManagerCreator(
 
 ```js
 import { Screen } from './screeen';
-import { ThemeProvider } from '@mk/react-native-theme';
+import { ThemeProvider } from 'react-native-theme-manage';
 import { ThemeManager } from './styles';
 
 export default function App() {
