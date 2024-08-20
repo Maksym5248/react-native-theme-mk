@@ -21,7 +21,7 @@ enum Events {
     ChangeTheme = 'ChangeTheme',
 }
 
-export class ThemeManagerCreator<C extends Record<string, object>> implements IThemeManager<C> {
+export class ThemeManager<C extends Record<string, object>> implements IThemeManager<C> {
     name: keyof C;
     private themes: C;
     context: React.Context<C[keyof C]>;
