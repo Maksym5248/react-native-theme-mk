@@ -5,7 +5,7 @@ Package for managing theme in react-native
 ## Installation
 
 ```sh
-npm install @mk/react-native-theme
+npm install react-native-safe-area-context @mk/react-native-theme
 ```
 
 ## Usage
