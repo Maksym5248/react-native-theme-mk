@@ -19,7 +19,6 @@ import { applyScale } from './scale';
 
 enum Events {
     ChangeTheme = 'ChangeTheme',
-    ChangeZoom = 'ChangeZoom',
 }
 
 export class ThemeManager<C extends Record<string, object>> implements IThemeManager<C> {
