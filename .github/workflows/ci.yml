@@ -71,6 +71,9 @@ jobs:
 
       - name: Build package
         run: yarn prepare
+        
+      - name: Configure npm for scoped package
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Publish to npm
         run: npm publish --access public
