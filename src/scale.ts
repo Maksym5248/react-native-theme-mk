@@ -1,8 +1,4 @@
-import { type ViewStyle, type TextStyle, type ImageStyle } from 'react-native';
-
-type NamedStyles<T> = {
-    [P in keyof T]: ViewStyle | TextStyle | ImageStyle;
-};
+import type { StyleSheet } from 'react-native';
 
 const SCALABLE_PROPS = new Set([
     'width',
@@ -50,19 +46,19 @@ const SCALABLE_PROPS = new Set([
     'scale',
 ]);
 
-export function applyScale<T extends NamedStyles<T>>(styles: T, scale: number): T {
-    const scaledStyles = {} as T;
+export function applyScale<B extends StyleSheet.NamedStyles<B> | StyleSheet.NamedStyles<any>>(styles: B, scale: number): B {
+    const scaledStyles = {} as B;
 
     for (const key in styles) {
         if (Object.prototype.hasOwnProperty.call(styles, key)) {
-            const value = styles[key as keyof T];
+            const value = styles[key as keyof B];
 
             if (typeof value === 'object' && value !== null) {
-                scaledStyles[key as keyof T] = applyScale(value as NamedStyles<T>, scale) as T[keyof T];
+                scaledStyles[key as keyof B] = applyScale(value as StyleSheet.NamedStyles<B>, scale) as B[keyof B];
             } else if (typeof value === 'number' && SCALABLE_PROPS.has(key)) {
-                scaledStyles[key as keyof T] = (value * scale) as NamedStyles<T> as T[keyof T];
+                scaledStyles[key as keyof B] = (value * scale) as StyleSheet.NamedStyles<B> as B[keyof B];
             } else {
-                scaledStyles[key as keyof T] = value;
+                scaledStyles[key as keyof B] = value;
             }
         }
     }
