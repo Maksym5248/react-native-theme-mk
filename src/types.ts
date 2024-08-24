@@ -58,8 +58,9 @@ export interface IThemeManager<C extends Record<string, object>> {
     createStyleSheet<B extends INamedStyles<B>>(
         stylesCreator: IStyleCreator<C, B>,
     ): (params?: IUseCreateStyleSheet<C>) => B | INamedStyles<B>;
-    useTheme(params?: Pick<IUseCreateStyleSheet<C>, 'overrideThemeName'>): C[keyof C];
-    useDevice(): IDevice;
+    useTheme: (params?: Pick<IUseCreateStyleSheet<C>, 'overrideThemeName'>) => C[keyof C];
+    useDevice: () => IDevice;
+    useScale: () => number;
     device: IDevice;
     dimensionsDesignedDevice: IDimensionDesignedDevice;
 }
