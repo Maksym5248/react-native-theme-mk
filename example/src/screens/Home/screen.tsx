@@ -9,9 +9,12 @@ export const HomeScreen = () => {
     const theme = useTheme();
 
     return (
-        <View style={[styles.container, { backgroundColor: theme.colors.accent }]}>
-            <Text style={styles.text}>Home View</Text>
-            <TouchableOpacity style={styles.button} />
+        <View style={[styles.container]}>
+            <Text style={[styles.text]}>Screen Light Theme</Text>
+            <Text style={[styles.text, { color: theme.colors.accent }]}>Light/Dark Theme text</Text>
+            <TouchableOpacity style={styles.button}>
+                <Text style={styles.text}>Button</Text>
+            </TouchableOpacity>
         </View>
     );
 };

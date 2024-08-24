@@ -1,14 +1,9 @@
 import { Dimensions, Platform, type EmitterSubscription } from 'react-native';
 import { initialWindowMetrics } from 'react-native-safe-area-context';
-import { type IDevice, type IDeviceInternal } from './types';
-
-const orientations = {
-    PORTRAIT: 'portrait',
-    LANDSCAPE: 'landscape',
-};
+import { type IDevice, type IDeviceInternal, Orientation } from './types';
 
 function getOrientation(height: number, width: number) {
-    return width < height ? orientations.PORTRAIT : orientations.LANDSCAPE;
+    return width < height ? Orientation.Portrait : Orientation.Landscape;
 }
 
 // @ts-ignore
@@ -45,11 +40,11 @@ export class Device implements IDevice, IDeviceInternal {
     }
 
     get isLandscape() {
-        return getOrientation(this.window.height, this.window.width) === orientations.LANDSCAPE;
+        return this.orientation === Orientation.Landscape;
     }
 
     get isPortrait() {
-        return getOrientation(this.window.height, this.window.width) === orientations.PORTRAIT;
+        return this.orientation === Orientation.Portrait;
     }
 
     get inset() {
@@ -68,7 +63,7 @@ export class Device implements IDevice, IDeviceInternal {
         return this.window.height <= 600;
     }
     get screenAspectRatio() {
-        return this.window.width < this.window.height ? this.window.height / this.window.width : this.window.width / this.window.height;
+        return this.isPortrait ? this.window.height / this.window.width : this.window.width / this.window.height;
     }
 
     addDimensionsEventListener(callback: any) {

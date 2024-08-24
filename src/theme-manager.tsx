@@ -5,14 +5,15 @@ import { StyleSheet } from 'react-native';
 import {
     type IThemeManager,
     type IDimensionDesignedDevice,
-    type INamedStyles,
     type OnChangeCallBack,
     type IDevice,
     type IDeviceInternal,
     type IOptions,
+    type IUseCreateStyleSheet,
+    type IStyleCreator,
+    type INamedStyles,
 } from './types';
-import { useStyles } from './use-styles';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Device } from './device';
 import { dimensionsDesignedDeviceConfig } from './config';
 import { applyScale } from './scale';
@@ -31,12 +32,14 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
 
     eventEmitter = new EventEmitter();
 
-    constructor(name: keyof C, themes: C, { autoScale, dimensionsDesignedDevice }: IOptions) {
+    constructor(name: keyof C, themes: C, options?: IOptions) {
+        const { autoScale, dimensionsDesignedDevice } = options ?? {};
+
         this.themes = themes;
         this.name = name;
         this.context = createContext({} as C[keyof C]);
         this.device = new Device();
-        this.autoScale = autoScale;
+        this.autoScale = !!autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
     }
 
@@ -49,34 +52,20 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
         this.eventEmitter.emit(Events.ChangeTheme, name);
     }
 
-    onChange(cb: OnChangeCallBack<keyof C>): () => void {
-        this.eventEmitter.on(Events.ChangeTheme, cb);
-        return () => this.eventEmitter.removeListener(Events.ChangeTheme, cb);
-    }
-
     get(name: keyof C) {
         return this.themes[name];
+    }
+
+    onChangeName(cb: OnChangeCallBack<keyof C>): () => void {
+        this.eventEmitter.on(Events.ChangeTheme, cb);
+        return () => this.eventEmitter.removeListener(Events.ChangeTheme, cb);
     }
 
     removeAllListeners() {
         this.eventEmitter.removeAllListeners();
     }
 
-    useTheme(overrideThemeName?: keyof C) {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        return overrideThemeName ? this.get(overrideThemeName) : useContext<C[keyof C]>(this.context);
-    }
-
-    useThemeName() {
-        this.useTheme();
-        return this.name;
-    }
-
-    useDevice() {
-        return this.device;
-    }
-
-    useScale() {
+    get scale() {
         const { width, height } = this.dimensionsDesignedDevice;
         const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = this.device.screen;
 
@@ -84,37 +73,49 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
 
         return scale;
     }
+
     setAutoScale(value: boolean) {
         this.autoScale = value;
     }
 
-    createStyleSheet<B extends INamedStyles<B>>(stylesCreator: (params: { theme: C[keyof C]; device: IDevice; scale: number }) => B) {
-        const scale = this.useScale();
-
+    createStyleSheet<B extends INamedStyles<B> & INamedStyles<any>>(stylesCreator: IStyleCreator<C, B>) {
         const createStyleSheet = ({ theme, overrideAutoScale }: { theme: C[keyof C]; device: IDevice; overrideAutoScale?: boolean }) => {
             const shouldScale = overrideAutoScale !== undefined ? overrideAutoScale : this.autoScale;
 
             const modifiedStyles = shouldScale
-                ? applyScale(stylesCreator({ theme, device: this.device, scale }), scale)
-                : stylesCreator({ theme, device: this.device, scale });
+                ? applyScale(stylesCreator({ theme, device: this.device, scale: this.scale }), this.scale)
+                : stylesCreator({ theme, device: this.device, scale: this.scale });
 
-            return StyleSheet.create(modifiedStyles);
+            return StyleSheet.create<B>(modifiedStyles);
         };
 
-        return ({ overrideThemeName, overrideAutoScale }: { overrideThemeName?: keyof C; overrideAutoScale?: boolean } = {}): B =>
-            useStyles<B, C>({
-                themeManager: this,
-                overrideThemeName,
-                createStyleSheet,
-                overrideAutoScale,
-            });
+        return ({ overrideThemeName, overrideAutoScale }: IUseCreateStyleSheet<C> = {}): B => {
+            const theme = this.useTheme();
+            const cache = useRef<Record<keyof C, B>>({} as unknown as Record<keyof C, B>).current;
+
+            const styles = useMemo(() => {
+                const currentName = overrideThemeName || this.name;
+
+                if (!cache[currentName]) {
+                    cache[currentName] = createStyleSheet({
+                        theme,
+                        device: this.device,
+                        overrideAutoScale,
+                    });
+                }
+
+                return cache?.[currentName];
+            }, [theme, cache, overrideThemeName, overrideAutoScale]);
+
+            return styles;
+        };
     }
 
     ThemeProvider = ({ children }: React.PropsWithChildren<{}>) => {
-        const [currentThemeName, setCurrentThemeName] = useState<keyof C>('');
+        const [currentThemeName, setCurrentThemeName] = useState<keyof C>(this.name);
 
         useEffect(() => {
-            const unsubscribe = this.onChange((name) => {
+            const unsubscribe = this.onChangeName((name) => {
                 setCurrentThemeName(name);
             });
             return unsubscribe;
@@ -124,6 +125,24 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
             return null;
         }
 
-        return <this.context.Provider value={this.get(currentThemeName)}>{children}</this.context.Provider>;
+        const { Provider } = this.context;
+
+        return <Provider value={this.get(currentThemeName)}>{children}</Provider>;
+    };
+
+    useTheme = (params?: Pick<IUseCreateStyleSheet<C>, 'overrideThemeName'>) => {
+        const { overrideThemeName } = params ?? {};
+
+        const theme = useContext<C[keyof C]>(this.context);
+
+        return overrideThemeName ? this.get(overrideThemeName) : theme;
+    };
+
+    useDevice = () => {
+        return this.device;
+    };
+
+    useScale = () => {
+        return this.scale;
     };
 }

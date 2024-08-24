@@ -12,7 +12,7 @@ npm install react-native-safe-area-context react-native-theme-mk
 
 ```js
 import { themePrimary } from './primary-theme';
-import { ThemeManagerCreator } from 'react-native-theme-mk';
+import { ThemeManager as ThemeManagerCreator } from 'react-native-theme-mk';
 import { type IThemeManagerSchema } from './types';
 
 const theme = {
@@ -38,48 +38,56 @@ export const ThemeManager = new ThemeManagerCreator(
 ```
 
 ```js
-import { Screen } from './screeen';
-import { ThemeProvider } from 'react-native-theme-mk';
+import { HomeScreen } from './screens/Home';
 import { ThemeManager } from './styles';
+
+const { ThemeProvider } = ThemeManager;
 
 export default function App() {
     return (
-        <ThemeProvider themeManager={ThemeManager}>
-            <Screen />
+        <ThemeProvider>
+            <HomeScreen />
         </ThemeProvider>
     );
 }
 ```
 
 ```js
-import { ThemeManager } from '../styles';
+import { ThemeManager } from '../../styles';
 
-export const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
+export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     container: {
         flex: 1,
         backgroundColor: theme.colors.background,
     },
     text: theme.text.h1,
-    content: {
-        height: device.window.height,
+    button: {
+        margin: theme.lineHeight.H1,
+        height: 50,
+        backgroundColor: theme.colors.accent,
     },
 }));
+
 ```
 
 ```js
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useStyles } from './screen.styles';
 import { ThemeManager } from '../../styles';
 
 const { useTheme } = ThemeManager;
 
-export const Screen = () => {
-    const styles = useStyles();
+export const HomeScreen = () => {
+    const styles = useStyles({ overrideAutoScale: false, overrideThemeName: 'light' });
     const theme = useTheme();
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>TEST</Text>
+        <View style={[styles.container]}>
+            <Text style={[styles.text]}>Screen Light Theme</Text>
+            <Text style={[styles.text, { color: theme.colors.accent }]}>Light/Dark Theme text</Text>
+            <TouchableOpacity style={styles.button}>
+                <Text style={styles.text}>Button</Text>
+            </TouchableOpacity>
         </View>
     );
 };

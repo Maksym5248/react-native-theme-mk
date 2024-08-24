@@ -7,4 +7,7 @@ export const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
         height: device.window.height,
     },
     text: theme.text.h1,
+    button: {
+        display: 'flex',
+    },
 }));

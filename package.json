@@ -1,6 +1,6 @@
 {
   "name": "react-native-theme-mk",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Package for managing theme in react-native",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.js",

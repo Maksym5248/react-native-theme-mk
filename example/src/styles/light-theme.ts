@@ -19,7 +19,7 @@ export const themeBase: IBaseThemeSchema = {
         backgroundChat: palette.creamF5,
         backgroundModal: palette.transparent,
         textSecondary: palette.white,
-        accent: palette.green78,
+        accent: palette.creamF5,
         accentLight: palette.greenF7,
         error: palette.redEF,
         transparent: palette.transparent,
