@@ -12,6 +12,7 @@ import {
     type IUseCreateStyleSheet,
     type IStyleCreator,
     type INamedStyles,
+    type IScale,
 } from './types';
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Device } from './device';
@@ -65,13 +66,19 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
         this.eventEmitter.removeAllListeners();
     }
 
-    get scale() {
-        const { width, height } = this.dimensionsDesignedDevice;
+    get scale(): IScale {
+        const { width: DESIGN_WIDTH, height: DESIGN_HEIGHT } = this.dimensionsDesignedDevice;
         const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = this.device.screen;
 
-        const scale = DEVICE_WIDTH / width < DEVICE_HEIGHT / height ? DEVICE_WIDTH / width : DEVICE_HEIGHT / height;
+        const scaleW = DEVICE_WIDTH / DESIGN_WIDTH;
+        const scaleH = DEVICE_HEIGHT / DESIGN_HEIGHT;
+        const scaleFactor = (scaleW + scaleH) / 2;
 
-        return scale;
+        return {
+            scaleW,
+            scaleH,
+            scaleFactor,
+        };
     }
 
     setAutoScale(value: boolean) {
@@ -83,14 +90,14 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
             const shouldScale = overrideAutoScale !== undefined ? overrideAutoScale : this.autoScale;
 
             const modifiedStyles = shouldScale
-                ? applyScale(stylesCreator({ theme, device: this.device, scale: this.scale }), this.scale)
+                ? applyScale(stylesCreator({ theme, device: this.device, scale: this.scale }), this.scale, this.device.screen)
                 : stylesCreator({ theme, device: this.device, scale: this.scale });
 
             return StyleSheet.create<B>(modifiedStyles);
         };
 
         return ({ overrideThemeName, overrideAutoScale }: IUseCreateStyleSheet<C> = {}): B => {
-            const theme = this.useTheme();
+            const theme = this.useTheme({ overrideThemeName });
             const cache = useRef<Record<keyof C, B>>({} as unknown as Record<keyof C, B>).current;
 
             const styles = useMemo(() => {

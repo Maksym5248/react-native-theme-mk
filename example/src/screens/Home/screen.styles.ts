@@ -5,10 +5,11 @@ export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
         flex: 1,
         backgroundColor: theme.colors.background,
     },
-    text: theme.text.h1,
+    text: { marginTop: 50, ...theme.text.h1 },
     button: {
         margin: theme.lineHeight.H1,
         height: 50,
         backgroundColor: theme.colors.accent,
     },
+    buttonText: theme.text.h1,
 }));
