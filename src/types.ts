@@ -16,6 +16,17 @@ export enum Orientation {
     Landscape = 'landscape',
 }
 
+export interface IDimensionDevice {
+    width: number;
+    height: number;
+}
+
+export interface IScale {
+    scaleW: number;
+    scaleH: number;
+    scaleFactor: number;
+}
+
 /**
  * Interface representing device-specific properties and characteristics.
  */
@@ -133,7 +144,7 @@ export interface IUseCreateStyleSheet<C> {
 export type IStyleCreator<C, B extends INamedStyles<B> | INamedStyles<any>> = (params: {
     theme: C[keyof C];
     device: IDevice;
-    scale: number;
+    scale: IScale;
 }) => B & INamedStyles<any>;
 
 /**
@@ -216,7 +227,7 @@ export interface IThemeManager<C extends Record<string, object>> {
      *
      * @returns The scale factor.
      */
-    useScale: () => number;
+    useScale: () => IScale;
 
     /**
      * The device information.
