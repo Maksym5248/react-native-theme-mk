@@ -1,114 +1,96 @@
 import { PixelRatio } from 'react-native';
 import { applyScale, applyScaleToValue } from '../scale';
-import type { IScale, IDimensionDevice } from '../types';
+import type { IScale } from '../types';
 
 describe('scale', () => {
     describe('applyScaleToValue', () => {
         const scale: IScale = {
-            scaleW: 1.2,
-            scaleH: 1.3,
-            scaleFactor: 1.1,
+            horizontal: 1.2,
+            vertical: 1.1,
+            symmetric: 1.1,
         };
 
-        const dimensionDevice: IDimensionDevice = {
-            width: 400,
-            height: 800,
-        };
-
-        it('should scale horizontal properties', () => {
-            const result = applyScaleToValue(100, 'width', scale, dimensionDevice);
-            expect(result).toEqual({ width: PixelRatio.roundToNearestPixel(120) });
-        });
-
-        it('should scale vertical properties', () => {
-            const result = applyScaleToValue(100, 'height', scale, dimensionDevice);
-            expect(result).toEqual({ height: PixelRatio.roundToNearestPixel(130) });
-        });
-
-        it('should limit width to the dimensionDevice width', () => {
-            const result = applyScaleToValue(500, 'width', scale, dimensionDevice);
-            expect(result).toEqual({ width: PixelRatio.roundToNearestPixel(400) });
-        });
-
-        it('should scale margin correctly', () => {
-            const result = applyScaleToValue(50, 'margin', scale, dimensionDevice);
+        it('should scale value correctly based on symmetric scale', () => {
+            const result = applyScaleToValue(100, 'width', scale);
             expect(result).toEqual({
-                marginVertical: PixelRatio.roundToNearestPixel(50 * scale.scaleH),
-                marginHorizontal: PixelRatio.roundToNearestPixel(50 * scale.scaleW),
+                width: PixelRatio.roundToNearestPixel(100 * scale.symmetric),
             });
         });
 
-        it('should scale padding correctly', () => {
-            const result = applyScaleToValue(30, 'padding', scale, dimensionDevice);
+        it('should scale value with PixelRatio rounding', () => {
+            const result = applyScaleToValue(50.7, 'height', scale);
             expect(result).toEqual({
-                paddingVertical: PixelRatio.roundToNearestPixel(30 * scale.scaleH),
-                paddingHorizontal: PixelRatio.roundToNearestPixel(30 * scale.scaleW),
-            });
-        });
-        it('should not scale non-scalable properties', () => {
-            const nonScalableStyles = {
-                container: {
-                    backgroundColor: 'red',
-                    zIndex: 2,
-                },
-            };
-
-            const result = applyScale(nonScalableStyles, scale, dimensionDevice);
-
-            expect(result.container).toEqual({
-                backgroundColor: 'red',
-                zIndex: 2,
+                height: PixelRatio.roundToNearestPixel(50.7 * scale.symmetric),
             });
         });
     });
 
     describe('applyScale', () => {
         const scale: IScale = {
-            scaleW: 1.2,
-            scaleH: 1.3,
-            scaleFactor: 1.1,
-        };
-
-        const dimensionDevice: IDimensionDevice = {
-            width: 400,
-            height: 800,
+            horizontal: 1.2,
+            vertical: 1.1,
+            symmetric: 1.1,
         };
 
         const styles = {
             container: {
-                width: 200,
-                height: 300,
+                width: 100,
+                height: 200,
                 margin: 10,
                 padding: 5,
                 fontSize: 16,
             },
         };
 
-        it('should scale all applicable properties correctly', () => {
-            const result = applyScale(styles, scale, dimensionDevice);
+        it('should scale all applicable properties based on symmetric scale', () => {
+            const result = applyScale(styles, scale);
 
-            expect(result.container).toEqual({
-                width: PixelRatio.roundToNearestPixel(240),
-                height: PixelRatio.roundToNearestPixel(390),
-                marginVertical: PixelRatio.roundToNearestPixel(10 * scale.scaleH),
-                marginHorizontal: PixelRatio.roundToNearestPixel(10 * scale.scaleW),
-                paddingVertical: PixelRatio.roundToNearestPixel(5 * scale.scaleH),
-                paddingHorizontal: PixelRatio.roundToNearestPixel(5 * scale.scaleW),
-                fontSize: PixelRatio.roundToNearestPixel(16 * scale.scaleFactor),
+            expect(result).toEqual({
+                container: {
+                    width: PixelRatio.roundToNearestPixel(100 * scale.symmetric),
+                    height: PixelRatio.roundToNearestPixel(200 * scale.symmetric),
+                    margin: PixelRatio.roundToNearestPixel(10 * scale.symmetric),
+                    padding: PixelRatio.roundToNearestPixel(5 * scale.symmetric),
+                    fontSize: PixelRatio.roundToNearestPixel(16 * scale.symmetric),
+                },
             });
         });
 
-        it('should limit width to the device width', () => {
-            const oversizedStyles = {
+        it('should not scale non-scalable properties', () => {
+            const nonScalableStyles = {
                 container: {
-                    width: 500,
-                    height: 300,
+                    backgroundColor: 'red',
+                    zIndex: 10,
                 },
             };
 
-            const result = applyScale(oversizedStyles, scale, dimensionDevice);
+            const result = applyScale(nonScalableStyles, scale);
 
-            expect(result.container.width).toEqual(PixelRatio.roundToNearestPixel(400));
+            expect(result).toEqual(nonScalableStyles);
+        });
+
+        it('should scale nested objects correctly', () => {
+            const nestedStyles = {
+                container: {
+                    width: 150,
+                    padding: 10,
+                },
+                text: {
+                    fontSize: 20,
+                },
+            };
+
+            const result = applyScale(nestedStyles, scale);
+
+            expect(result).toEqual({
+                container: {
+                    width: PixelRatio.roundToNearestPixel(150 * scale.symmetric),
+                    padding: PixelRatio.roundToNearestPixel(10 * scale.symmetric),
+                },
+                text: {
+                    fontSize: PixelRatio.roundToNearestPixel(20 * scale.symmetric),
+                },
+            });
         });
     });
 });

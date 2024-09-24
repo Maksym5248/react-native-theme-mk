@@ -16,15 +16,10 @@ export enum Orientation {
     Landscape = 'landscape',
 }
 
-export interface IDimensionDevice {
-    width: number;
-    height: number;
-}
-
 export interface IScale {
-    scaleW: number;
-    scaleH: number;
-    scaleFactor: number;
+    horizontal: number;
+    vertical: number;
+    symmetric: number;
 }
 
 /**

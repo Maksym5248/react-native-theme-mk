@@ -70,14 +70,14 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
         const { width: DESIGN_WIDTH, height: DESIGN_HEIGHT } = this.dimensionsDesignedDevice;
         const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = this.device.screen;
 
-        const scaleW = DEVICE_WIDTH / DESIGN_WIDTH;
-        const scaleH = DEVICE_HEIGHT / DESIGN_HEIGHT;
-        const scaleFactor = (scaleW + scaleH) / 2;
+        const horizontal = DEVICE_WIDTH / DESIGN_WIDTH;
+        const vertical = DEVICE_HEIGHT / DESIGN_HEIGHT;
+        const symmetric = Math.min(horizontal, vertical);
 
         return {
-            scaleW,
-            scaleH,
-            scaleFactor,
+            horizontal,
+            vertical,
+            symmetric,
         };
     }
 
@@ -90,7 +90,7 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
             const shouldScale = overrideAutoScale !== undefined ? overrideAutoScale : this.autoScale;
 
             const modifiedStyles = shouldScale
-                ? applyScale(stylesCreator({ theme, device: this.device, scale: this.scale }), this.scale, this.device.screen)
+                ? applyScale(stylesCreator({ theme, device: this.device, scale: this.scale }), this.scale)
                 : stylesCreator({ theme, device: this.device, scale: this.scale });
 
             return StyleSheet.create<B>(modifiedStyles);
