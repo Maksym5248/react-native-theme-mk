@@ -12,6 +12,22 @@ npm install react-native-safe-area-context react-native-theme-mk
 
 ## Usage
 
+### Important: SafeAreaProvider
+
+You must wrap your app with `SafeAreaProvider` from `react-native-safe-area-context` for device insets to work correctly:
+
+```jsx
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+export default function App() {
+    return (
+        <SafeAreaProvider>
+            {/* Your theme provider and screens here */}
+        </SafeAreaProvider>
+    );
+}
+```
+
 ## Usage
 
 ### `ThemeManager`
@@ -51,23 +67,26 @@ npm install react-native-safe-area-context react-native-theme-mk
 | `params.device` | `IDevice`    | The device information.                        |
 | `params.scale`  | `number`     | The scale factor.                              |
 
+
 #### Device
 
-| Property            | Description                                   |
-| ------------------- | --------------------------------------------- |
-| `isAndroid`         | Indicates if the device is running Android.   |
-| `isIOS`             | Indicates if the device is running iOS.       |
-| `isTablet`          | Indicates if the device is a tablet.          |
-| `isIphoneX`         | Indicates if the device is an iPhone X.       |
-| `window`            | Dimensions of the device's window.            |
-| `screen`            | Dimensions of the device's screen.            |
-| `orientation`       | Current orientation of the device.            |
-| `isLandscape`       | Indicates if the device is in landscape mode. |
-| `isPortrait`        | Indicates if the device is in portrait mode.  |
-| `inset`             | Insets of the device's screen.                |
-| `isSmallScreen`     | Indicates if the device has a small screen.   |
-| `isShortScreen`     | Indicates if the device has a short screen.   |
-| `screenAspectRatio` | Aspect ratio of the device's screen.          |
+| Property            | Type      | Description                                   |
+|---------------------|-----------|-----------------------------------------------|
+| `isAndroid`         | boolean   | True if the device is running Android.        |
+| `isIOS`             | boolean   | True if the device is running iOS.            |
+| `isTablet`          | boolean   | True if the device is a tablet.               |
+| `isIphoneX`         | boolean   | True if the device is an iPhone X.            |
+| `window`            | object    | Dimensions of the device's window `{ width, height }`. |
+| `screen`            | object    | Dimensions of the device's screen `{ width, height }`. |
+| `orientation`       | enum      | Current orientation (`Portrait` or `Landscape`). |
+| `isLandscape`       | boolean   | True if the device is in landscape mode.      |
+| `isPortrait`        | boolean   | True if the device is in portrait mode.       |
+| `insets`             | object    | Insets of the device's screen `{ top, right, bottom, left }`. |
+| `frame`             | object    | Insets of the device's screen `{ width, height, x, y }`. |
+| `isSmallScreen`     | boolean   | True if the device has a small screen.        |
+| `isShortScreen`     | boolean   | True if the device has a short screen.        |
+| `screenAspectRatio` | number    | Aspect ratio of the device's screen.          |
+| `key`               | string    | Unique key for the device dimensions.         |
 
 ### `Example`
 
@@ -99,6 +118,7 @@ export const ThemeManager = new ThemeManagerCreator(
 ```
 
 ```js
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { HomeScreen } from './screens/Home';
 import { ThemeManager } from './styles';
 
@@ -106,9 +126,11 @@ const { ThemeProvider } = ThemeManager;
 
 export default function App() {
     return (
-        <ThemeProvider>
-            <HomeScreen />
-        </ThemeProvider>
+        <SafeAreaProvider>
+            <ThemeProvider>
+                <HomeScreen />
+            </ThemeProvider>
+        </SafeAreaProvider>
     );
 }
 ```

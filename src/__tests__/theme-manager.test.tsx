@@ -22,6 +22,10 @@ jest.mock('react-native', () => ({
         isTV: false,
     },
 }));
+jest.mock('react-native-safe-area-context', () => ({
+    useSafeAreaFrame: jest.fn(() => ({ width: 375, height: 812, x: 0, y: 0 })),
+    useSafeAreaInsets: jest.fn(() => ({ right: 0, top: 0, left: 0, bottom: 0 })),
+}));
 
 jest.mock('../device');
 jest.mock('../scale');

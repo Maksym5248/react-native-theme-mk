@@ -21,12 +21,12 @@ import { dimensionsDesignedDeviceConfig } from './config';
 import { applyScale } from './scale';
 import { hexToRgba } from './utils';
 import merge from 'lodash/merge';
+import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 enum Events {
     ChangeTheme = 'ChangeTheme',
     UpdateTheme = 'UpdateTheme',
 }
-
 export class ThemeManager<C extends Record<string, object>> implements IThemeManager<C> {
     name: keyof C;
     private themes: C;
@@ -179,6 +179,8 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
         const [currentThemeName, setCurrentThemeName] = useState<keyof C>(this.name);
         const [deviceKey, setDeviceKey] = useState<string>('');
         const [, setForce] = useState<number>(0);
+        const insets = useSafeAreaInsets();
+        const frame = useSafeAreaFrame();
 
         useEffect(() => {
             const unsubscribeChange = this.onChangeName((name) => {
@@ -189,9 +191,7 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
                 setForce((prev) => prev + 1);
             });
 
-            this.device.init(() => {
-                setDeviceKey(this.device.key);
-            });
+            this.device.init();
 
             return () => {
                 unsubscribeChange();
@@ -199,6 +199,11 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
                 this.removeAllListeners();
             };
         }, []);
+
+        useMemo(() => {
+            this.device.updateSafeAreaInsets({ insets, frame });
+            setDeviceKey(this.device.key);
+        }, [insets, frame]);
 
         if (!children) {
             return null;

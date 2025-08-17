@@ -4,6 +4,7 @@ export type IPalette = 'black' | 'grey4E' | 'grey92' | 'creamF5' | 'white' | 'gr
 export type IColor =
     | 'white'
     | 'black'
+    | 'text'
     | 'primary'
     | 'secondary'
     | 'thirdiary'

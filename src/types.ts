@@ -1,8 +1,10 @@
 import { StyleSheet, type ImageStyle, type TextStyle, type ViewStyle } from 'react-native';
+import type { EdgeInsets, Rect } from 'react-native-safe-area-context';
 
 export interface IDeviceInternal {
-    init(callback: any): void;
     key: string;
+    init(callback?: () => void): void;
+    updateSafeAreaInsets({ insets, frame }: { insets: EdgeInsets; frame: Rect }): void;
     removeListeners(): void;
 }
 
@@ -37,6 +39,21 @@ export interface IDevice {
     isIOS: boolean;
 
     /**
+     * Indicates if the device is running on the web.
+     */
+    isWeb: boolean;
+
+    /**
+     * Indicates if the device is running on macOS.
+     */
+    isMac: boolean;
+
+    /**
+     * Indicates if the device is running on Windows.
+     */
+    isWindows: boolean;
+
+    /**
      * Indicates if the device is a tablet.
      */
     isTablet: boolean;
@@ -45,6 +62,16 @@ export interface IDevice {
      * Indicates if the device is an iPhone X.
      */
     isIphoneX: boolean;
+
+    /**
+     * Indicates if the device is a TV.
+     */
+    isTV: boolean;
+
+    /**
+     * Indicates if the device is a iPad.
+     */
+    isPad: boolean;
 
     /**
      * Dimensions of the device's window.
@@ -88,6 +115,7 @@ export interface IDevice {
 
     /**
      * Insets of the device's screen.
+     * @deprecated
      */
     inset: {
         /**
@@ -110,6 +138,16 @@ export interface IDevice {
          */
         bottom: number;
     };
+
+    /**
+     * Insets of the device's screen.
+     */
+    insets: EdgeInsets;
+
+    /**
+     * Frame of the device.
+     */
+    frame: Rect;
 
     /**
      * Indicates if the device has a small screen.

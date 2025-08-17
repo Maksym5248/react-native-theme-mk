@@ -10,6 +10,7 @@ export const themeBase: IBaseThemeSchema = {
     colors: {
         white: palette.white,
         black: palette.black,
+        text: palette.white,
         primary: palette.white,
         secondary: palette.grey4E,
         thirdiary: palette.grey92,

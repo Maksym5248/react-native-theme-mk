@@ -15,6 +15,18 @@ export class Device implements IDevice {
         left: 0,
         bottom: 0,
     };
+    insets = {
+        right: 0,
+        top: 0,
+        left: 0,
+        bottom: 0,
+    };
+    frame = {
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+    };
     screenAspectRatio = 2;
 
     orientation = Orientation.Portrait;
@@ -27,6 +39,11 @@ export class Device implements IDevice {
     isShortScreen = false;
     isSmallScreen = false;
     isTablet = false;
+    isMac = false;
+    isWindows = false;
+    isPad = false;
+    isTV = false;
+    isWeb = false;
 
     removeAllListeners = jest.fn();
 }
