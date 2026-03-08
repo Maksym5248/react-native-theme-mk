@@ -1,31 +1,37 @@
 # react-native-theme-mk
 
-Package for managing theme in react-native
+⚡ Powerful and simple theming system for React Native\
+with auto-scaling, device awareness, and full TypeScript support.
 
-A simple solution for theme management in react-native, with its help you can use any schemes, with type definitions, with the ability to dynamically update the theme, with access to device data (width, height)
+> Build scalable, responsive, and maintainable themes\
+> with light/dark mode and dynamic updates --- without boilerplate.
 
-## Installation
+------------------------------------------------------------------------
 
-```sh
-npm install react-native-safe-area-context react-native-theme-mk
+## ✨ Features
+
+-   ✅ Light / Dark / Custom themes
+-   ✅ Automatic screen scaling
+-   ✅ Device & orientation detection
+-   ✅ Safe area support
+-   ✅ Type-safe themes (TypeScript)
+-   ✅ Runtime theme updates
+-   ✅ React Hooks API
+-   ✅ Zero config setup
+-   ✅ Production-tested
+
+------------------------------------------------------------------------
+
+## 📦 Installation
+
+``` bash
+npm install react-native-theme-mk react-native-safe-area-context
 ```
 
-## Usage
+or
 
-### Important: SafeAreaProvider
-
-You must wrap your app with `SafeAreaProvider` from `react-native-safe-area-context` for device insets to work correctly:
-
-```jsx
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-export default function App() {
-    return (
-        <SafeAreaProvider>
-            {/* Your theme provider and screens here */}
-        </SafeAreaProvider>
-    );
-}
+``` bash
+yarn add react-native-theme-mk react-native-safe-area-context
 ```
 
 ## Usage
@@ -97,15 +103,22 @@ import { themePrimary } from './primary-theme';
 import { ThemeManager as ThemeManagerCreator } from 'react-native-theme-mk';
 import { type IThemeManagerSchema } from './types';
 
-const theme = {
-    primary: themePrimary,
-};
+## ⚡ Quick Start (30 seconds)
+
+### 1️⃣ Create Theme Manager
+
+``` ts
+import { ThemeManager as ThemeManagerCreator } from 'react-native-theme-mk';
 
 export const ThemeManager = new ThemeManagerCreator(
-    'dark',
-    {
-        light: lightTheme,
-        dark: darkTheme,
+  'dark',
+  {
+    light: {
+      colors: {
+        background: '#ffffff',
+        text: '#000000',
+        accent: '#ff9800',
+      },
     },
     {
         autoScale: true,
@@ -116,93 +129,155 @@ export const ThemeManager = new ThemeManagerCreator(
             height: 812,
         }
     },
+  },
+  {
+    autoScale: true,
+  }
 );
-
 ```
 
-```js
+------------------------------------------------------------------------
+
+### 2️⃣ Wrap Application
+
+``` tsx
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { HomeScreen } from './screens/Home';
-import { ThemeManager } from './styles';
+import { ThemeManager } from './theme';
 
 const { ThemeProvider } = ThemeManager;
 
 export default function App() {
-    return (
-        <SafeAreaProvider>
-            <ThemeProvider>
-                <HomeScreen />
-            </ThemeProvider>
-        </SafeAreaProvider>
-    );
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <Root />
+      </ThemeProvider>
+    </SafeAreaProvider>
+  );
 }
 ```
 
-```js
-import { ThemeManager } from '../../styles';
+------------------------------------------------------------------------
 
-export const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-    container: {
-        flex: 1,
-        backgroundColor: theme.colors.background,
-    },
-    text: theme.text.h1,
-    button: {
-        margin: theme.lineHeight.H1,
-        height: 50,
-        backgroundColor: theme.colors.accent,
-    },
+### 3️⃣ Create Typed Styles
+
+``` ts
+export const useStyles = ThemeManager.createStyleSheet(({ theme, scale }) => ({
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+    padding: scale(16),
+  },
+
+  text: {
+    color: theme.colors.text,
+    fontSize: scale(16),
+  },
+
+  button: {
+    height: scale(48),
+    borderRadius: scale(12),
+    backgroundColor: theme.colors.accent,
+  },
 }));
 ```
 
-```js
+------------------------------------------------------------------------
+
+### 4️⃣ Use in Component
+
+``` tsx
 import { View, Text, TouchableOpacity } from 'react-native';
-import { useStyles } from './screen.styles';
-import { ThemeManager } from '../../styles';
+import { useStyles } from './styles';
 
-const { useTheme } = ThemeManager;
+export function HomeScreen() {
+  const styles = useStyles();
 
-export const HomeScreen = () => {
-    const styles = useStyles({ overrideAutoScale: false, overrideThemeName: 'light' });
-    const theme = useTheme();
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Hello Theme 👋</Text>
 
-    return (
-        <View style={[styles.container]}>
-            <Text style={[styles.text]}>Screen Light Theme</Text>
-            <Text style={[styles.text, { color: theme.colors.accent }]}>Light/Dark Theme text</Text>
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.text}>Button</Text>
-            </TouchableOpacity>
-        </View>
-    );
-};
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.text}>Button</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 ```
 
-```js
-import { ThemeManager } from './styles';
+------------------------------------------------------------------------
 
+## 🎨 Switch Theme
+
+``` ts
+ThemeManager.set('light');
+ThemeManager.set('dark');
+```
+
+------------------------------------------------------------------------
+
+## 🔄 Update Theme Dynamically
+
+``` ts
 ThemeManager.update({
-    light: {
-        colors: {
-            newColor: '#123456',
-        },
+  light: {
+    colors: {
+      success: '#4CAF50',
     },
-    dark: {
-        colors: {
-            newColor: '#abcdef',
-        },
+  },
+
+  dark: {
+    colors: {
+      success: '#81C784',
     },
+  },
 });
 ```
 
-## Contributing
+------------------------------------------------------------------------
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+## 📱 Device & Scale API
 
-## License
+``` ts
+const { useDevice, useScale, useTheme } = ThemeManager;
+
+const device = useDevice();
+const scale = useScale();
+const theme = useTheme();
+```
+
+------------------------------------------------------------------------
+
+## ⚙️ ThemeManager Options
+
+  ------------------------------------------------------------------------
+  Option                     Type      Description
+  -------------------------- --------- -----------------------------------
+  autoScale                  boolean   Enable automatic scaling
+
+  dimensionsDesignedDevice   object    Reference device size for scaling
+  ------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## 🚀 Used in Production
+
+This library is actively used in real-world React Native applications.
+
+------------------------------------------------------------------------
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome.
+
+------------------------------------------------------------------------
+
+## ⭐ Support
+
+If this library saved you time, consider giving it a star ⭐
+
+------------------------------------------------------------------------
+
+## 📄 License
 
 MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)
