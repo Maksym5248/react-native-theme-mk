@@ -1,6 +1,8 @@
 import { Orientation, type IDevice } from '../types';
 
 export class Device implements IDevice {
+    maxWidth = undefined;
+
     screen = {
         width: 100,
         height: 200,

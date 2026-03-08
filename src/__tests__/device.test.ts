@@ -1,4 +1,4 @@
-import { Platform as PlatformMock } from 'react-native';
+import { Dimensions as DimensionsMock, Platform as PlatformMock } from 'react-native';
 import { Device } from '../device';
 
 jest.mock('react-native', () => ({
@@ -42,6 +42,7 @@ jest.mock(
 describe('Device', () => {
     let device: Device;
     const Platform = jest.mocked(PlatformMock);
+    const Dimensions = jest.mocked(DimensionsMock);
 
     beforeEach(() => {
         device = new Device();
@@ -82,6 +83,17 @@ describe('Device', () => {
             Platform.isPad = true;
 
             expect(device.isTablet).toBe(true);
+        });
+    });
+
+    describe('maxWidth option', () => {
+        it('should cap window width by provided maxWidth', () => {
+            Dimensions.get.mockReturnValue({ width: 1200, height: 812, scale: 1, fontScale: 1 });
+
+            const webDevice = new Device(640);
+
+            expect(webDevice.window.width).toBe(640);
+            expect(webDevice.screen.width).toBe(640);
         });
     });
 });

@@ -38,6 +38,7 @@ export default function App() {
 | -------------------------- | --------------------------------------------- |
 | `dimensionsDesignedDevice` | Dimensions of the designed device (optional). |
 | `autoScale`                | Enables auto-scaling (optional).              |
+| `maxWidth`                 | Caps device width (`window.width` / `screen.width`) to this value (optional). |
 
 #### `Methods and fields`
 
@@ -77,6 +78,7 @@ export default function App() {
 | `isTablet`          | boolean   | True if the device is a tablet.               |
 | `isIphoneX`         | boolean   | True if the device is an iPhone X.            |
 | `window`            | object    | Dimensions of the device's window `{ width, height }`. |
+| `maxWidth`          | number    | Configured max width cap from `ThemeManager` options. |
 | `screen`            | object    | Dimensions of the device's screen `{ width, height }`. |
 | `orientation`       | enum      | Current orientation (`Portrait` or `Landscape`). |
 | `isLandscape`       | boolean   | True if the device is in landscape mode.      |
@@ -107,6 +109,7 @@ export const ThemeManager = new ThemeManagerCreator(
     },
     {
         autoScale: true,
+        maxWidth: 480,
         //@default designed device dimensions
         dimensionsDesignedDevice: {
             width: 375,
