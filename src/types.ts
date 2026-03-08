@@ -89,6 +89,11 @@ export interface IDevice {
     };
 
     /**
+     * Maximum allowed width for device dimensions.
+     */
+    maxWidth?: number;
+
+    /**
      * Dimensions of the device's screen.
      */
     screen: {
@@ -293,6 +298,7 @@ export interface IThemeManager<C extends Record<string, object>> {
 export interface IOptions {
     dimensionsDesignedDevice?: IDimensionDesignedDevice;
     autoScale?: boolean;
+    maxWidth?: number;
 }
 
 export type DeepPartial<T> = {

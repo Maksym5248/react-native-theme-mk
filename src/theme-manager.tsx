@@ -39,13 +39,13 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
     eventEmitter = new EventEmitter();
 
     constructor(name: keyof C, themes: C, options?: IOptions) {
-        const { autoScale, dimensionsDesignedDevice } = options ?? {};
+        const { autoScale, dimensionsDesignedDevice, maxWidth } = options ?? {};
 
         this.themes = themes;
         this.name = name;
         this.context = createContext({} as C[keyof C]);
         this.contextDevice = createContext('');
-        this.device = new Device();
+        this.device = new Device(maxWidth);
         this.autoScale = !!autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
     }
@@ -191,7 +191,10 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
                 setForce((prev) => prev + 1);
             });
 
-            this.device.init();
+            this.device.init(() => {
+                setDeviceKey(this.device.key);
+            });
+            setDeviceKey(this.device.key);
 
             return () => {
                 unsubscribeChange();

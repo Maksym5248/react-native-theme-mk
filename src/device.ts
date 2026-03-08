@@ -9,6 +9,8 @@ function getOrientation(height: number, width: number) {
 export class Device implements IDevice, IDeviceInternal {
     dimentsionSubscription: EmitterSubscription | null = null;
 
+    maxWidth?: number;
+
     window = Dimensions.get('window');
 
     screen = Dimensions.get('screen');
@@ -26,6 +28,23 @@ export class Device implements IDevice, IDeviceInternal {
         x: initialWindowMetrics?.frame.x || 0,
         y: initialWindowMetrics?.frame.y || 0,
     };
+
+    constructor(maxWidth?: number) {
+        this.maxWidth = maxWidth;
+        this.window = this.applyMaxWidth(Dimensions.get('window'));
+        this.screen = this.applyMaxWidth(Dimensions.get('screen'));
+    }
+
+    private applyMaxWidth<T extends { width: number }>(dimension: T): T {
+        if (!this.maxWidth) {
+            return dimension;
+        }
+
+        return {
+            ...dimension,
+            width: Math.min(dimension.width, this.maxWidth),
+        };
+    }
 
     updateSafeAreaInsets({ insets, frame }: { insets: EdgeInsets; frame: Rect }) {
         this.insets = {
@@ -115,18 +134,20 @@ export class Device implements IDevice, IDeviceInternal {
 
     get key() {
         return JSON.stringify({
+            window: this.window,
+            screen: this.screen,
             insets: this.insets,
             frame: this.frame,
         });
     }
 
     init(callback?: () => void) {
-        this.window = Dimensions.get('window');
-        this.screen = Dimensions.get('screen');
+        this.window = this.applyMaxWidth(Dimensions.get('window'));
+        this.screen = this.applyMaxWidth(Dimensions.get('screen'));
 
         this.dimentsionSubscription = Dimensions.addEventListener('change', ({ window, screen }) => {
-            this.window = { ...window };
-            this.screen = { ...screen };
+            this.window = this.applyMaxWidth({ ...window });
+            this.screen = this.applyMaxWidth({ ...screen });
             callback?.();
         });
     }
