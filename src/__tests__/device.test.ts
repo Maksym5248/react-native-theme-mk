@@ -45,6 +45,7 @@ describe('Device', () => {
     const Dimensions = jest.mocked(DimensionsMock);
 
     beforeEach(() => {
+        Dimensions.get.mockReturnValue({ width: 375, height: 812, scale: 1, fontScale: 1 });
         device = new Device();
     });
 
@@ -94,6 +95,43 @@ describe('Device', () => {
 
             expect(webDevice.window.width).toBe(640);
             expect(webDevice.screen.width).toBe(640);
+        });
+    });
+
+    describe('screen size flags', () => {
+        it('should expose sm screen bucket for width 375', () => {
+            expect(device.isSmallScreen).toBe(false);
+            expect(device.screenSize).toBe('sm');
+            expect(device.isSmScreen).toBe(true);
+            expect(device.isMdScreen).toBe(false);
+        });
+
+        it('should expose xs screen bucket for width 340', () => {
+            Dimensions.get.mockReturnValue({ width: 340, height: 812, scale: 1, fontScale: 1 });
+            const xsDevice = new Device();
+
+            expect(xsDevice.isSmallScreen).toBe(true);
+            expect(xsDevice.screenSize).toBe('xs');
+            expect(xsDevice.isXsScreen).toBe(true);
+        });
+
+        it('should expose xl and xxl buckets for larger widths', () => {
+            Dimensions.get.mockReturnValue({ width: 1200, height: 812, scale: 1, fontScale: 1 });
+            const xlDevice = new Device();
+            expect(xlDevice.screenSize).toBe('xl');
+            expect(xlDevice.isXlScreen).toBe(true);
+
+            Dimensions.get.mockReturnValue({ width: 1600, height: 812, scale: 1, fontScale: 1 });
+            const xxlDevice = new Device();
+            expect(xxlDevice.screenSize).toBe('xxl');
+            expect(xxlDevice.isXxlScreen).toBe(true);
+        });
+
+        it('should support isAtLeast and isBetween helpers', () => {
+            expect(device.isAtLeast('xs')).toBe(true);
+            expect(device.isAtLeast('md')).toBe(false);
+            expect(device.isBetween('xs', 'md')).toBe(true);
+            expect(device.isBetween('md', 'xl')).toBe(false);
         });
     });
 });

@@ -1,9 +1,35 @@
 import { Dimensions, Platform, type EmitterSubscription } from 'react-native';
 import { initialWindowMetrics, type EdgeInsets, type Rect } from 'react-native-safe-area-context';
-import { type IDevice, type IDeviceInternal, Orientation } from './types';
+import { type IDevice, type IDeviceInternal, Orientation, type ScreenSize } from './types';
 
 function getOrientation(height: number, width: number) {
     return width < height ? Orientation.Portrait : Orientation.Landscape;
+}
+
+const SCREEN_SIZE_ORDER: ScreenSize[] = ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'];
+
+function getScreenSize(width: number): ScreenSize {
+    if (width <= 359) {
+        return 'xs';
+    }
+
+    if (width <= 479) {
+        return 'sm';
+    }
+
+    if (width <= 767) {
+        return 'md';
+    }
+
+    if (width <= 1023) {
+        return 'lg';
+    }
+
+    if (width <= 1439) {
+        return 'xl';
+    }
+
+    return 'xxl';
 }
 
 export class Device implements IDevice, IDeviceInternal {
@@ -122,6 +148,46 @@ export class Device implements IDevice, IDeviceInternal {
 
     get isSmallScreen() {
         return this.window.width <= 340;
+    }
+
+    get screenSize(): ScreenSize {
+        return getScreenSize(this.window.width);
+    }
+
+    get isXsScreen() {
+        return this.screenSize === 'xs';
+    }
+
+    get isSmScreen() {
+        return this.screenSize === 'sm';
+    }
+
+    get isMdScreen() {
+        return this.screenSize === 'md';
+    }
+
+    get isLgScreen() {
+        return this.screenSize === 'lg';
+    }
+
+    get isXlScreen() {
+        return this.screenSize === 'xl';
+    }
+
+    get isXxlScreen() {
+        return this.screenSize === 'xxl';
+    }
+
+    isAtLeast(size: ScreenSize) {
+        return SCREEN_SIZE_ORDER.indexOf(this.screenSize) >= SCREEN_SIZE_ORDER.indexOf(size);
+    }
+
+    isBetween(min: ScreenSize, max: ScreenSize) {
+        const current = SCREEN_SIZE_ORDER.indexOf(this.screenSize);
+        const minIndex = SCREEN_SIZE_ORDER.indexOf(min);
+        const maxIndex = SCREEN_SIZE_ORDER.indexOf(max);
+
+        return current >= minIndex && current <= maxIndex;
     }
 
     get isShortScreen() {
