@@ -92,7 +92,16 @@ yarn add react-native-theme-mk react-native-safe-area-context
 | `insets`             | object    | Insets of the device's screen `{ top, right, bottom, left }`. |
 | `frame`             | object    | Insets of the device's screen `{ width, height, x, y }`. |
 | `isSmallScreen`     | boolean   | True if the device has a small screen.        |
-| `isShortScreen`     | boolean   | True if the device has a short screen.        |
+| `screenSize`        | string    | Current width bucket: `xs` / `sm` / `md` / `lg` / `xl` / `xxl`. |
+| `isXsScreen`        | boolean   | True when `screenSize` is `xs`.               |
+| `isSmScreen`        | boolean   | True when `screenSize` is `sm`.               |
+| `isMdScreen`        | boolean   | True when `screenSize` is `md`.               |
+| `isLgScreen`        | boolean   | True when `screenSize` is `lg`.               |
+| `isXlScreen`        | boolean   | True when `screenSize` is `xl`.               |
+| `isXxlScreen`       | boolean   | True when `screenSize` is `xxl`.              |
+| `isAtLeast(size)`   | function  | Checks whether current `screenSize` is >= `size`. |
+| `isBetween(min,max)`| function  | Checks whether current `screenSize` is in range (inclusive). |
+| `isShortScreen`     | boolean   | Deprecated: use `screenSize` and size-bucket helpers. |
 | `screenAspectRatio` | number    | Aspect ratio of the device's screen.          |
 | `key`               | string    | Unique key for the device dimensions.         |
 

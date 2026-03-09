@@ -18,6 +18,8 @@ export enum Orientation {
     Landscape = 'landscape',
 }
 
+export type ScreenSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+
 export interface IScale {
     horizontal: number;
     vertical: number;
@@ -160,7 +162,58 @@ export interface IDevice {
     isSmallScreen: boolean;
 
     /**
+     * Current screen size bucket based on window width.
+     */
+    screenSize: ScreenSize;
+
+    /**
+     * Indicates if the device is in the extra-small size bucket.
+     */
+    isXsScreen: boolean;
+
+    /**
+     * Indicates if the device is in the small size bucket.
+     */
+    isSmScreen: boolean;
+
+    /**
+     * Indicates if the device is in the medium size bucket.
+     */
+    isMdScreen: boolean;
+
+    /**
+     * Indicates if the device is in the large size bucket.
+     */
+    isLgScreen: boolean;
+
+    /**
+     * Indicates if the device is in the extra-large size bucket.
+     */
+    isXlScreen: boolean;
+
+    /**
+     * Indicates if the device is in the extra-extra-large size bucket.
+     */
+    isXxlScreen: boolean;
+
+    /**
+     * Checks whether current screen size is at least the given size bucket.
+     *
+     * @param size - The size bucket to compare against.
+     */
+    isAtLeast(size: ScreenSize): boolean;
+
+    /**
+     * Checks whether current screen size is between two size buckets (inclusive).
+     *
+     * @param min - Minimum size bucket.
+     * @param max - Maximum size bucket.
+     */
+    isBetween(min: ScreenSize, max: ScreenSize): boolean;
+
+    /**
      * Indicates if the device has a short screen.
+     * @deprecated Use screenSize and size-bucket helpers instead.
      */
     isShortScreen: boolean;
 

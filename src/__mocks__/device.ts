@@ -40,12 +40,21 @@ export class Device implements IDevice {
     isPortrait = false;
     isShortScreen = false;
     isSmallScreen = false;
+    screenSize = 'xs' as const;
+    isXsScreen = true;
+    isSmScreen = false;
+    isMdScreen = false;
+    isLgScreen = false;
+    isXlScreen = false;
+    isXxlScreen = false;
     isTablet = false;
     isMac = false;
     isWindows = false;
     isPad = false;
     isTV = false;
     isWeb = false;
+    isAtLeast = jest.fn(() => false);
+    isBetween = jest.fn(() => false);
 
     removeAllListeners = jest.fn();
 }
