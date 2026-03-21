@@ -84,4 +84,17 @@ describe('Theme manager', () => {
         expect(scale).toHaveProperty('vertical');
         expect(scale).toHaveProperty('symmetric');
     });
+
+    it('should fallback to first available theme when initial theme name is invalid', () => {
+        const manager = new ThemeManager('unknown' as keyof typeof themes, themes);
+
+        expect(manager.theme).toStrictEqual(dark);
+    });
+
+    it('should keep current theme when set() is called with invalid theme name', () => {
+        themeManager.set('unknown' as keyof typeof themes);
+
+        expect(themeManager.name).toStrictEqual('dark');
+        expect(themeManager.theme).toStrictEqual(dark);
+    });
 });

@@ -43,11 +43,29 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
 
         this.themes = themes;
         this.name = name;
-        this.context = createContext({} as C[keyof C]);
-        this.contextDevice = createContext('');
         this.device = new Device(maxWidth);
+        this.context = createContext(this.get(this.name));
+        this.contextDevice = createContext(this.device.key);
         this.autoScale = !!autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
+    }
+
+    private resolveThemeName(name?: keyof C): keyof C {
+        if (name && this.themes[name]) {
+            return name;
+        }
+
+        if (this.themes[this.name]) {
+            return this.name;
+        }
+
+        const fallbackName = (Object.keys(this.themes) as Array<keyof C>)[0];
+
+        if (!fallbackName) {
+            throw new Error('ThemeManager: themes map is empty');
+        }
+
+        return fallbackName;
     }
 
     get theme() {
@@ -55,12 +73,13 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
     }
 
     set(name: keyof C) {
-        this.name = name;
-        this.eventEmitter.emit(Events.ChangeTheme, name);
+        const nextName = this.resolveThemeName(name);
+        this.name = nextName;
+        this.eventEmitter.emit(Events.ChangeTheme, nextName);
     }
 
     get(name: keyof C) {
-        return this.themes[name];
+        return this.themes[this.resolveThemeName(name)];
     }
 
     update(extendedThemes: DeepPartial<C>) {
@@ -176,7 +195,7 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
     }
 
     ThemeProvider = ({ children }: React.PropsWithChildren<{}>) => {
-        const [currentThemeName, setCurrentThemeName] = useState<keyof C>(this.name);
+        const [currentThemeName, setCurrentThemeName] = useState<keyof C>(this.resolveThemeName(this.name));
         const [deviceKey, setDeviceKey] = useState<string>('');
         const [, setForce] = useState<number>(0);
         const insets = useSafeAreaInsets();
@@ -216,7 +235,7 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
         const { Provider: DeviceProvider } = this.contextDevice;
 
         return (
-            <Provider value={this.get(currentThemeName)}>
+            <Provider value={this.get(this.resolveThemeName(currentThemeName))}>
                 <DeviceProvider value={deviceKey}>{children}</DeviceProvider>
             </Provider>
         );
@@ -226,8 +245,9 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
         const { overrideThemeName } = params ?? {};
 
         const theme = useContext<C[keyof C]>(this.context);
+        const fallbackTheme = this.theme;
 
-        return overrideThemeName ? this.get(overrideThemeName) : theme;
+        return overrideThemeName ? this.get(overrideThemeName) : theme || fallbackTheme;
     };
 
     useDevice = () => {
