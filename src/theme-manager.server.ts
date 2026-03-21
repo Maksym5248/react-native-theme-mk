@@ -1,6 +1,5 @@
 import EventEmitter from 'events';
 
-import { createContext } from 'react';
 import merge from 'lodash/merge';
 
 import {
@@ -42,8 +41,10 @@ export class ThemeManagerServer<C extends Record<string, object>> implements ITh
 
         this.themes = themes;
         this.name = name;
-        this.context = createContext({} as C[keyof C]);
-        this.contextDevice = createContext('');
+        // React Server Components runtime does not expose createContext.
+        // In server mode these contexts are never consumed, so keep inert placeholders.
+        this.context = {} as React.Context<C[keyof C]>;
+        this.contextDevice = {} as React.Context<string>;
         this.device = new DeviceServer(maxWidth);
         this.autoScale = !!autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
