@@ -1,7 +1,5 @@
 import EventEmitter from 'events';
-
 import merge from 'lodash/merge';
-
 import {
     type IThemeManager,
     type IDimensionDesignedDevice,
@@ -14,6 +12,8 @@ import {
     type INamedStyles,
     type IScale,
     type DeepPartial,
+    type IThemeFactory,
+    type IThemeSource,
 } from './types';
 import { DeviceServer } from './device.server';
 import { dimensionsDesignedDeviceConfig } from './config';
@@ -36,18 +36,22 @@ export class ThemeManagerServer<C extends Record<string, object>> implements ITh
 
     eventEmitter = new EventEmitter();
 
-    constructor(name: keyof C, themes: C, options?: IOptions) {
+    constructor(name: keyof C, themes: IThemeSource<C>, options?: IOptions) {
         const { autoScale, dimensionsDesignedDevice, maxWidth } = options ?? {};
 
-        this.themes = themes;
         this.name = name;
         // React Server Components runtime does not expose createContext.
         // In server mode these contexts are never consumed, so keep inert placeholders.
         this.context = {} as React.Context<C[keyof C]>;
         this.contextDevice = {} as React.Context<string>;
         this.device = new DeviceServer(maxWidth);
+        this.themes = this.isThemeFactory(themes) ? themes({ device: this.device }) : themes;
         this.autoScale = !!autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
+    }
+
+    private isThemeFactory(source: IThemeSource<C>): source is IThemeFactory<C> {
+        return typeof source === 'function';
     }
 
     get theme() {

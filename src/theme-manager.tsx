@@ -13,6 +13,8 @@ import {
     type IStyleCreator,
     type INamedStyles,
     type IScale,
+    type IThemeFactory,
+    type IThemeSource,
     type DeepPartial,
 } from './types';
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
@@ -20,8 +22,8 @@ import { Device } from './device';
 import { dimensionsDesignedDeviceConfig } from './config';
 import { applyScale } from './scale';
 import { hexToRgba } from './utils';
-import merge from 'lodash/merge';
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
+import merge from 'lodash/merge';
 
 enum Events {
     ChangeTheme = 'ChangeTheme',
@@ -38,16 +40,20 @@ export class ThemeManager<C extends Record<string, object>> implements IThemeMan
 
     eventEmitter = new EventEmitter();
 
-    constructor(name: keyof C, themes: C, options?: IOptions) {
+    constructor(name: keyof C, themes: IThemeSource<C>, options?: IOptions) {
         const { autoScale, dimensionsDesignedDevice, maxWidth } = options ?? {};
 
-        this.themes = themes;
         this.name = name;
         this.device = new Device(maxWidth);
+        this.themes = this.isThemeFactory(themes) ? themes({ device: this.device }) : themes;
         this.context = createContext(this.get(this.name));
         this.contextDevice = createContext(this.device.key);
         this.autoScale = !!autoScale;
         this.dimensionsDesignedDevice = dimensionsDesignedDevice || dimensionsDesignedDeviceConfig;
+    }
+
+    private isThemeFactory(source: IThemeSource<C>): source is IThemeFactory<C> {
+        return typeof source === 'function';
     }
 
     private resolveThemeName(name?: keyof C): keyof C {

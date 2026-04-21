@@ -354,6 +354,14 @@ export interface IOptions {
     maxWidth?: number;
 }
 
+export interface IThemeFactoryParams {
+    device: IDevice;
+}
+
+export type IThemeFactory<C extends Record<string, object>> = (params: IThemeFactoryParams) => C;
+
+export type IThemeSource<C extends Record<string, object>> = C | IThemeFactory<C>;
+
 export type DeepPartial<T> = {
     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
